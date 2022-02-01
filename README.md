@@ -1,5 +1,5 @@
 # abacus
-abacus for numbers of arbitrary lenght
+abacus for numbers of arbitrary length
 
 This program acts as a digital abacus. It performs calculations such as addition, substraction, multiplication and division, both for positive and negative integers.
 Like an abacus it is only able to work with integers.
