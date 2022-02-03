@@ -36,15 +36,16 @@ struct PlaceValue* createPV(){
 
 //createAbacus creates an Abacus containing the number 0 - that is, the abacus is empty.
 //int base is base n, where n is the base for the number system (base 10 for decimal, base 2 for binary etc).
-struct Abacus* createAbacus(int base, char* n){
-    struct Abacus* give = malloc(sizeof(struct Abacus));
-    give->first = NULL;
-    give->last = NULL;
-    give->len = 0;
-    give->base = base;
-    give->negative = 0;
+struct Abacus* createAbacus(int base){
+	struct PlaceValue* new = createPV();
+	struct Abacus* give = malloc(sizeof(struct Abacus));
+	give->first = new;
+	give->last = new;
+	give->len = 0;
+	give->base = base;
+	give->negative = 0;
 
-    return give;
+	return give;
 }
 
 
@@ -67,33 +68,41 @@ void destroyAbacus(struct Abacus* abacus){
 	free(abacus);
 }
 
-int main(){
-    struct PlaceValue* lols = initPV();
-    printf("%d", lols->value);
-    int un = 0;
-    int dec = 0;
-    int cent = 0;
 
-    int set = 2;
-    int i = 1;
-    int n = set * 10;
+//addOne is the internal mechanism for operating one digit within the abacus number system.
+//only used by addDigit.
+void addOne(struct Abacus* abacus){
 
-    while (1){
-        if (un == (set - 1) && dec == (set - 1)){
-            dec = 0;
-            un = 0;
-            cent++;
-        }
-        else if (un == (set - 1)){
-            dec++;
-            un = 0;
-        }
-        else un++;
-        printf("%d%d%d", cent, dec, un);
-        i++;
-        if (i>n) break;
-        if (i%set == 1) printf("\n");
-        else printf(", ");
-    }
+	struct PlaceValue* current = abacus->first;
 
+	while (!current || abacus->base - 1 == current->value){
+		if(!current){
+			current = createPV();
+			current->prev = abacus->last;
+			abacus->last->next = current;
+			abacus->last = current;
+			break;
+		}
+		current->value = 0;
+		current = current->next;
+	}
+	current->value++;
+}
+	
+//addDigit is performed on one PV of the abacus. It adds input to the current PV as in an abacus.
+//n is limited to one digit.
+void addDigit(struct Abacus* abacus, int n){
+	while (n > 0){
+		addOne(abacus);
+		n--;
+	}
+}
+
+void printAbacus(struct Abacus* abacus){
+	struct PlaceValue* pointer = abacus->last;
+	while (pointer){
+		printf("%d", pointer->value);
+		pointer = pointer->prev;
+	}
+	printf ("\n");
 }
