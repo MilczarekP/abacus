@@ -49,22 +49,47 @@ struct Abacus* createAbacus(int base){
 }
 
 
-//setToZero sets Abacus to zero by freeing all PVs within.
-void setToZero(struct Abacus* abacus){
-	struct PlaceValue* pointer = abacus->first;
-	while (pointer){
-		struct PlaceValue* destroy = pointer;
-		pointer = pointer->next;
-		free(destroy);
-	}
-	abacus->len = 0;
-	abacus->negative = 0;
+//isValidDigit checks if a given character fits within the limits of number base.
+//base can be anywhere from base 2 to base 62. First it's digits 0-9, then a-z, and finally A-Z.
+//returns 0 if false and 1 if true.
+int isValidDigit(char c){
+
 }
+
+
+//readInput takes char* num as well as base.
+//The characers are read one by one, and checked to ensure they fit within base.
+//The characters are transfered into a PlaceValue linked list (essentially a FIFO stack).
+//function returns 0 if read is successful, 1 if it is not.
+int readInput (char* num, int base, struct PlaceValue** linkedList){
+	int i = 0;
+	for (i; num[i]; i++){
+		if(isValidDigit(num[i]), base){
+			(&linkedList)->value = num[i];
+			struct PlaceValue* temp = (&linkedList);
+			&linkedList = initPV();
+			(&linkedList)->next  = temp;
+		}
+		else return 1;
+	}
+	return 0;
+}
+
+
+//setAbacus sets abacus to number specified by variable n.
+//n is a string limited to digits 0-9 and characters a-z and A-Z, contingent on the base of abacus.
+void setAbacus(struct Abacus* abacus, char* n);
 
 
 //destroyAbacus frees Abacus and all PVs within it.
 void destroyAbacus(struct Abacus* abacus){
-	setToZero(abacus);
+	struct PlaceValue* pointer = abacus->first;
+	while(pointer){
+		struct PlaceValue* destroy = pointer;
+		pointer = pointer->next;
+		free(destroy);
+	}
+	//setToZero(abacus);
 	free(abacus);
 }
 
@@ -98,6 +123,7 @@ void addDigit(struct Abacus* abacus, int n){
 	}
 }
 
+//printAbacus prints the value held by given struct Abacus*.
 void printAbacus(struct Abacus* abacus){
 	struct PlaceValue* pointer = abacus->last;
 	while (pointer){
