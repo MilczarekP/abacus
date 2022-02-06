@@ -53,7 +53,9 @@ struct Abacus* createAbacus(int base){
 //base can be anywhere from base 2 to base 62. First it's digits 0-9, then a-z, and finally A-Z.
 //returns 0 if false and 1 if true.
 int isValidDigit(char c){
-
+	return (c >= 48 && c <= 57 ||
+		c >= 65 && c <= 90 ||
+		c >= 97 && c <= 122);
 }
 
 
